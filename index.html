@@ -64,7 +64,7 @@
     var system = new THREE.Mesh(
             new THREE.SphereGeometry(25, 128, 128),
             new THREE.MeshPhongMaterial({
-                map: THREE.ImageUtils.loadTexture('../assets/textures/starfield.jpg'),
+                map: THREE.ImageUtils.loadTexture('assets/textures/starfield.jpg'),
                 side: THREE.BackSide
             })
     );
@@ -72,10 +72,10 @@
 
     function createMesh(sphere, imageFile) {
         var mat =  new THREE.MeshPhongMaterial({
-            map: THREE.ImageUtils.loadTexture("../assets/textures/" + imageFile),
-            bumpMap: THREE.ImageUtils.loadTexture("../assets/textures/VenusNormal2k.png"),
+            map: THREE.ImageUtils.loadTexture("assets/textures/" + imageFile),
+            bumpMap: THREE.ImageUtils.loadTexture("assets/textures/VenusNormal2k.png"),
             bumpScale: 0.0005,
-            specularMap: THREE.ImageUtils.loadTexture('../assets/textures/VenusNormal2k.png'),
+            specularMap: THREE.ImageUtils.loadTexture('assets/textures/VenusNormal2k.png'),
             shininess: 25,
             specular: new THREE.Color('blue')
         });
@@ -86,7 +86,7 @@
     var clouds = new THREE.Mesh(
             new THREE.SphereGeometry(2.01, 128, 128),
             new THREE.MeshPhongMaterial({
-                map: THREE.ImageUtils.loadTexture('../assets/textures/venus_clouds__NASA_JPL_Seal_Mariner10_Oct21_2001.jpg'),
+                map: THREE.ImageUtils.loadTexture('assets/textures/venus_clouds__NASA_JPL_Seal_Mariner10_Oct21_2001.jpg'),
                 transparent: true,
                 opacity: 0.8
             })

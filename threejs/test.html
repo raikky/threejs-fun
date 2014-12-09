@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>three.js particle tutorial</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <style>
+        body {
+            color: #808080;
+            font-family: Monospace;
+            font-size: 13px;
+            text-align: center;
+
+            background-color: #ffffff;
+            margin: 0px;
+            overflow: hidden;
+        }
+
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="container"></div>
+
+<script src="js/three.min.js"></script>
+<script src="js/stats.min.js"></script>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/renderers/Projector.js"></script>
+<script src="js/renderers/CanvasRenderer.js"></script>
+
+<script>
+    var stats;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 8;
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // LIGHTS START
+    scene.add(new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.4));
+    var light1 = new THREE.HemisphereLight(0x6666ff, 0xff0000, 0.4);
+    light1.position.set(-5, -3, -5);
+    scene.add(light1);
+    var light2 = new THREE.DirectionalLight(0xFFFFFF, 0.4);
+    light2.position.set(5, 3, 5);
+    scene.add(light2);
+    // LIGHTS END
+
+    // MESHES START
+    var venus = createMesh(new THREE.SphereGeometry(2, 128, 128), "venussurface__praesepe.jpg");
+    scene.add(venus);
+
+    var system = new THREE.Mesh(
+            new THREE.SphereGeometry(25, 128, 128),
+            new THREE.MeshPhongMaterial({
+                map: THREE.ImageUtils.loadTexture('../assets/textures/starfield.jpg'),
+                side: THREE.BackSide
+            })
+    );
+    scene.add(system);
+
+    function createMesh(sphere, imageFile) {
+        var mat =  new THREE.MeshPhongMaterial({
+            map: THREE.ImageUtils.loadTexture("../assets/textures/" + imageFile),
+            bumpMap: THREE.ImageUtils.loadTexture("../assets/textures/VenusNormal2k.png"),
+            bumpScale: 0.0005,
+            specularMap: THREE.ImageUtils.loadTexture('../assets/textures/VenusNormal2k.png'),
+            shininess: 25,
+            specular: new THREE.Color('blue')
+        });
+        var mesh = new THREE.Mesh(sphere, mat);
+        return mesh;
+    }
+
+    var clouds = new THREE.Mesh(
+            new THREE.SphereGeometry(2.01, 128, 128),
+            new THREE.MeshPhongMaterial({
+                map: THREE.ImageUtils.loadTexture('../assets/textures/venus_clouds__NASA_JPL_Seal_Mariner10_Oct21_2001.jpg'),
+                transparent: true,
+                opacity: 0.8
+            })
+    );
+    scene.add(clouds);
+    // MESHES END
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    var render = function () {
+        requestAnimationFrame(render);
+
+        venus.rotation.y += 0.0005;
+        clouds.rotation.y += 0.0008;
+        clouds.rotation.z += 0.0008;
+
+        system.rotation.y -= 0.0001;
+        system.rotation.x -= 0.0001;
+        system.rotation.z -= 0.0001;
+
+        light1.rotation.x += 0.1;
+        light1.rotation.y += 0.1;
+        light1.rotation.z += 0.1;
+        light2.rotation.x += 0.1;
+        light2.rotation.y += 0.1;
+        light2.rotation.z += 0.1;
+
+        renderer.render(scene, camera);
+        stats.update();
+    };
+
+    stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(renderer.domElement);
+    document.getElementById('container').appendChild(stats.domElement);
+    window.addEventListener('resize', onWindowResize, false);
+
+    render();
+</script>
+</body>
+</html>
